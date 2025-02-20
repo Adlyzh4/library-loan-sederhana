@@ -4,13 +4,19 @@ const db = require('../config/db');
 
 // Menampilkan daftar buku
 router.get('/', (req, res) => {
-    db.query('SELECT * FROM books', (err, results) => {
+    db.query(`
+        SELECT books.*, loans.due_date 
+        FROM books 
+        LEFT JOIN loans ON books.id = loans.book_id AND loans.status = "dipinjam"
+    `, (err, results) => {
         if (err) {
-            return res.status(500).send('Gagal mengambil data buku');
+            console.error('Gagal mengambil daftar buku:', err);
+            return res.status(500).send('Terjadi kesalahan');
         }
         res.render('books', { books: results });
     });
 });
+
 
 //route untuk menambahkan buku
 router.post('/add', (req, res) => {

@@ -9,7 +9,7 @@
     <h1>Daftar Buku</h1>
 
     <% books.forEach(book => { %>
-        <p><%= book.title %> - <%= book.author %></p>
+        <p><%= book.title %> - <%= book.author %> (Status: <%= book.status %>)</p>
 
         <!-- Form Edit -->
         <form action="/books/edit/<%= book.id %>" method="POST">
@@ -17,6 +17,23 @@
             <input type="text" name="author" value="<%= book.author %>" required>
             <button type="submit">Edit</button>
         </form>
+
+        <% if (book.status === 'tersedia') { %>
+            <form action="/loans/borrow" method="POST">
+                <input type="hidden" name="book_id" value="<%= book.id %>">
+                
+                <label for="borrower_name">Nama Peminjam:</label>
+                <input type="text" name="borrower_name" required>
+            
+                <label for="due_date">Deadline (Tgl Pengembalian):</label>
+                <input type="date" name="due_date" required>
+            
+                <button type="submit">Pinjam</button>
+            </form>
+            
+        <% } else { %>
+            <p><strong>Buku sedang dipinjam</strong></p>
+        <% } %>
 
         <!-- Form Hapus -->
         <form action="/books/delete/<%= book.id %>" method="POST">
