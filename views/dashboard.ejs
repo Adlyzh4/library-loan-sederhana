@@ -3,48 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin</title>
+    <title>Dashboard Buku</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="container mt-5">
-    <h1 class="text-center mb-4">Dashboard Perpustakaan</h1>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <a class="navbar-brand" href="#">Perpustakaan</a>
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="/dashboard">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/books" class="nav-link">Kelola Buku</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/loans" class="nav-link">Lihat Peminjaman</a>
+                </li>
+            </ul>
+            <form class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+    </nav>
 
-    <div class="row text-center">
-        <div class="col-md-3">
-            <div class="card p-3 bg-primary text-white">
-                <h4>Total Buku</h4>
-                <h2><%= totalBooks %></h2>
+    <div class="container mt-5">
+        <h1 class="text-center fw-bold text-primary mb-4">📚 Dashboard Perpustakaan</h1>
+    
+        <div class="row g-4">
+            <!-- Total Buku -->
+            <div class="col-md-4">
+                <div class="card shadow-lg border-0 p-4 text-white bg-gradient bg-primary">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="fas fa-book fa-3x"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold">Total Buku</h5>
+                            <h2 class="fw-bold"><%= totalBooks %></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Buku Tersedia -->
+            <div class="col-md-4">
+                <div class="card shadow-lg border-0 p-4 text-white bg-gradient bg-success">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="fas fa-check-circle fa-3x"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold">Buku Tersedia</h5>
+                            <h2 class="fw-bold"><%= availableBooks %></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Buku Dipinjam -->
+            <div class="col-md-4">
+                <div class="card shadow-lg border-0 p-4 text-white bg-gradient bg-danger">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="fas fa-book-reader fa-3x"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold">Buku Dipinjam</h5>
+                            <h2 class="fw-bold"><%= borrowedBooks %></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Total Peminjaman -->
+            <div class="col-md-4">
+                <div class="card shadow-lg border-0 p-4 text-dark bg-gradient bg-warning">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="fas fa-exchange-alt fa-3x"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold">Total Peminjaman</h5>
+                            <h2 class="fw-bold"><%= totalLoans %></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Buku Terlambat -->
+            <div class="col-md-4">
+                <div class="card shadow-lg border-0 p-4 text-white bg-gradient bg-dark">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="fas fa-clock fa-3x"></i>
+                        </div>
+                        <div>
+                            <h5 class="fw-bold">Buku Terlambat</h5>
+                            <h2 class="fw-bold"><%= lateBooks %></h2>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card p-3 bg-success text-white">
-                <h4>Buku Tersedia</h4>
-                <h2><%= availableBooks %></h2>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card p-3 bg-danger text-white">
-                <h4>Buku Dipinjam</h4>
-                <h2><%= borrowedBooks %></h2>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card p-3 bg-warning text-dark">
-                <h4>Total Peminjaman</h4>
-                <h2><%= totalLoans %></h2>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card p-3 bg-danger text-white">
-                <h4>Buku Terlambat</h4>
-                <h2><%= lateBooks %></h2>
-            </div>
-        </div>        
     </div>
+    
 
-    <div class="text-center mt-4">
-        <a href="/books" class="btn btn-primary">Kelola Buku</a>
-        <a href="/loans" class="btn btn-secondary">Lihat Peminjaman</a>
-    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -25,7 +25,7 @@ router.post('/add', (req, res) => {
         if (err) {
             return res.status(500).send('Gagal menambahkan buku');
         }
-        res.redirect('/books');
+        res.redirect('/books?message=Buku berhasil ditambahkan&type=success');
     });
 });
 
@@ -37,7 +37,7 @@ router.post('/edit/:id', (req, res) => {
         if (err) {
             return res.status(500).send('Gagal mengedit buku');
         }
-        res.redirect('/books');
+        res.redirect('/books?message=Buku berhasil diedit&type=success');
     });
 });
 
@@ -48,9 +48,11 @@ router.post('/delete/:id', (req, res) => {
         if (err) {
             return res.status(500).send('Gagal menghapus buku');
         }
-        res.redirect('/books');
+        res.redirect('/books?message=Buku berhasil dihapus&type=success');
     });
 });
+
+
 
 
 

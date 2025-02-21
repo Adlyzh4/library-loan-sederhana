@@ -38,7 +38,7 @@ router.post('/borrow', (req, res) => {
                     console.error('Gagal memperbarui status buku:', err);
                     return res.status(500).send('Terjadi kesalahan');
                 }
-                res.redirect('/loans');
+                res.redirect('/loans?message=Buku berhasil dipinjam&type=success');
             });
     });
 });
@@ -75,7 +75,7 @@ router.post('/return/:id', (req, res) => {
                     console.error('Gagal memperbarui status buku:', err);
                     return res.status(500).send('Terjadi kesalahan');
                 }
-                res.redirect('/loans');
+                res.redirect('/loans?message=Buku berhasil dikembalikan&type=success');
             });
         });
     });
@@ -86,9 +86,9 @@ router.post('/delete/:id', (req, res) => {
     const { id } = req.params;
     db.query('DELETE FROM loans WHERE id = ?', [id], (err) => {
         if (err) {
-            return res.status(500).send('Gagal menghapus pinjaman buku');
+            return res.status(500).send('Gagal menghapus buku');
         }
-        res.redirect('/loans');
+        res.redirect('/loans?message=Buku berhasil dihapus&type=success');
     });
 });
 
