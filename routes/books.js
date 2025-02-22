@@ -1,59 +1,74 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const db = require('../config/db');
+const db = require("../config/db");
 
-// Menampilkan daftar buku
-router.get('/', (req, res) => {
-    db.query(`
-        SELECT books.*, loans.due_date 
-        FROM books 
-        LEFT JOIN loans ON books.id = loans.book_id AND loans.status = "dipinjam"
-    `, (err, results) => {
-        if (err) {
-            console.error('Gagal mengambil daftar buku:', err);
-            return res.status(500).send('Terjadi kesalahan');
-        }
-        res.render('books', { books: results });
-    });
+// Menampilkan daftar buku dengan filter pencarian
+router.get("/", async (req, res) => {
+    try {
+        const searchQuery = req.query.search ? `%${req.query.search}%` : "%";
+        const sql = `
+            SELECT books.*, loans.due_date 
+            FROM books 
+            LEFT JOIN loans ON books.id = loans.book_id AND loans.status = "dipinjam"
+            WHERE books.title LIKE ? OR books.author LIKE ?
+        `;
+
+        const [books] = await db.query(sql, [searchQuery, searchQuery]);
+        res.render("books", { books, searchQuery: req.query.search || "" });
+    } catch (err) {
+        console.error("Gagal mengambil daftar buku:", err);
+        res.status(500).send("Terjadi kesalahan");
+    }
 });
 
-
-//route untuk menambahkan buku
-router.post('/add', (req, res) => {
+// Route untuk menambahkan buku
+router.post("/add", async (req, res) => {
     const { title, author } = req.body;
-    db.query('INSERT INTO books (title, author) VALUES (?, ?)', [title, author], (err) => {
-        if (err) {
-            return res.status(500).send('Gagal menambahkan buku');
-        }
-        res.redirect('/books?message=Buku berhasil ditambahkan&type=success');
-    });
+
+    try {
+        await db.query("INSERT INTO books (title, author) VALUES (?, ?)", [title, author]);
+        res.redirect("/books?message=Buku berhasil ditambahkan&type=success");
+    } catch (err) {
+        console.error("Gagal menambahkan buku:", err);
+        res.status(500).send("Terjadi kesalahan");
+    }
 });
 
-//route untuk mengedit buku
-router.post('/edit/:id', (req, res) => {
+// Route untuk mengedit buku
+router.post("/edit/:id", async (req, res) => {
     const { title, author } = req.body;
     const { id } = req.params;
-    db.query('UPDATE books SET title = ?, author = ? WHERE id = ?', [title, author, id], (err) => {
-        if (err) {
-            return res.status(500).send('Gagal mengedit buku');
+
+    try {
+        const [result] = await db.query("UPDATE books SET title = ?, author = ? WHERE id = ?", [title, author, id]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).send("Buku tidak ditemukan");
         }
-        res.redirect('/books?message=Buku berhasil diedit&type=success');
-    });
+
+        res.redirect("/books?message=Buku berhasil diedit&type=success");
+    } catch (err) {
+        console.error("Gagal mengedit buku:", err);
+        res.status(500).send("Terjadi kesalahan");
+    }
 });
 
-//route untuk hapus buku
-router.post('/delete/:id', (req, res) => {
+// Route untuk menghapus buku
+router.post("/delete/:id", async (req, res) => {
     const { id } = req.params;
-    db.query('DELETE FROM books WHERE id = ?', [id], (err) => {
-        if (err) {
-            return res.status(500).send('Gagal menghapus buku');
+
+    try {
+        const [result] = await db.query("DELETE FROM books WHERE id = ?", [id]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).send("Buku tidak ditemukan");
         }
-        res.redirect('/books?message=Buku berhasil dihapus&type=success');
-    });
+
+        res.redirect("/books?message=Buku berhasil dihapus&type=success");
+    } catch (err) {
+        console.error("Gagal menghapus buku:", err);
+        res.status(500).send("Terjadi kesalahan");
+    }
 });
-
-
-
-
 
 module.exports = router;

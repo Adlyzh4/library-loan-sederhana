@@ -26,16 +26,17 @@
                     <a href="/loans" class="nav-link">Lihat Peminjaman</a>
                 </li>
             </ul>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
           </div>
         </div>
     </nav>
 
     <div class="container mt-5">
         <h1 class="text-center fw-bold text-primary mb-4">📖 Daftar Buku yang Dipinjam</h1>
+        <div class="d-flex justify-content-end mb-3">
+            <a href="/loans/export/pdf" class="btn btn-danger">Export PDF</a>
+            <a href="/loans/export/excel" class="btn btn-success ms-2">Export Excel</a>
+        </div>
+        
     
         <div class="table-responsive">
             <table class="table table-hover table-bordered align-middle text-center">

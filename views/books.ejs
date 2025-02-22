@@ -26,8 +26,8 @@
                     <a href="/loans" class="nav-link">Lihat Peminjaman</a>
                 </li>
             </ul>
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <form class="d-flex" role="search" action="/books" method="GET">
+              <input class="form-control me-2" type="search" name="search" placeholder="Cari buku..." aria-label="Search">
               <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
           </div>
@@ -35,7 +35,13 @@
     </nav>
 
     <div class="container mt-4">
-        <h1 class="text-center mb-4">📚 Daftar Buku</h1>
+        <h2 class="mt-3">
+            <% if (searchQuery && searchQuery !== "") { %>
+                Hasil pencarian untuk: "<%= searchQuery %>"
+            <% } else { %>
+                Daftar Buku
+            <% } %>
+        </h2>        
     
         <div class="row">
             <% books.forEach(book => { %>
